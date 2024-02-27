@@ -30,3 +30,12 @@ exports.addUser = async function (req, res) {
   let data = await user.createUser();
   res.status(200).json({ data });
 };
+
+
+
+
+exports.getAllUsers = async function (req, res) {
+  let users = new User();
+  let data = await users.getAllUsers();
+  res.status(201).json({ data: data });
+};

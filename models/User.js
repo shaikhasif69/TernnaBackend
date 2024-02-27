@@ -22,6 +22,11 @@ User.prototype.cleanUp = function () {
   };
 };
 
+User.prototype.allUsers =async function(){
+  let data = await userCollection.find({}).toArray();
+  return data;
+}
+
 User.prototype.createUser = async function () {
   this.cleanUp();
   const existingUser = await userCollection.findOne({
@@ -70,7 +75,7 @@ User.prototype.login = async function () {
   }
 };
 
-User.prototype.getUser = async function () {
+User.prototype.getAllUsers = async function () {
   let data = await userCollection.find({}).toArray();
   return data;
 };
