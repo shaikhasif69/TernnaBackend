@@ -1,33 +1,32 @@
-const dotenv = require("dotenv")
+const dotenv = require("dotenv");
 
 dotenv.config();
-const User = require("../models/User")
+const User = require("../models/User");
 
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
-
-
-exports.login = function(req, res){
-    console.log(req.body);
-    let user = new User(req.body);
-    user.login().then(function(result){
-        let jwtSecretKey = process.env.JWT_SECRET_KEY;
-        let data = {
-            role:result.role, 
-            id: result._id
-        }
-        const token = jwt.sign(data, jwtSecretKey)
-        res.json({token:token, role:result.role, id:result._id.toString() })
-    }).catch(function(e){
-        console.log(e);
+exports.login = function (req, res) {
+  console.log(req.body);
+  let user = new User(req.body);
+  user
+    .login()
+    .then(function (result) {
+      let jwtSecretKey = process.env.JWT_SECRET_KEY;
+      let data = {
+        role: result.role,
+        id: result._id,
+      };
+      const token = jwt.sign(data, jwtSecretKey);
+      res.json({ token: token, user: result });
     })
-}
+    .catch(function (e) {
+      console.log(e);
+    });
+};
 
-
-exports.addUser = async function(req, res){
-    console.log(req.body)
-    let user = new User(req.body)
-    let data = await user.createUser();
-    res.status(201).json({message: "user added"})
-    
-}
+exports.addUser = async function (req, res) {
+  console.log(req.body);
+  let user = new User(req.body);
+  let data = await user.createUser();
+  res.status(200).json({ data });
+};

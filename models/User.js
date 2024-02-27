@@ -1,72 +1,74 @@
-const userCollection = require("../db").collection("users")
+const userCollection = require("../db").collection("users");
 
-const { ObjectId } = require("mongodb")
-const bcrypt = require("bcryptjs")
-const nodemailer = require("nodemailer")
+const { ObjectId } = require("mongodb");
+const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
 
 let User = function (data) {
-    this.data = data;
-    this.errors = [];
-}
-
-
-
-User.prototype.cleanUp = function(){
-    this.data = {
-        name: this.data.name,
-        gender:this.data.gender, 
-        email: this.data.email, 
-        password: this.data.password, 
-        CreatedDate: new Date(),
-    }
+  this.data = data;
+  this.errors = [];
 };
 
-User.prototype.createUser = async function(){
+User.prototype.cleanUp = function () {
+  this.data = {
+    userEmail: this.data.userEmail,
+    userPhone: this.data.userPhone,
+    userPassword: this.data.userPassword,
+    createdAt: new Date(),
+  };
+};
+
+User.prototype.createUser = async function () {
+  this.cleanUp();
+  const existingUser = await userCollection.findOne({
+    userEmail: this.data.userEmail,
+  });
+  if (existingUser) {
+    return "User with this email already exists. Please use another email.";
+  }
+  this.data.userPassword = await bcrypt.hash(this.data.userPassword, 10);
+  let data = await userCollection.insertOne(this.data);
+
+  if (data.acknowledged) {
+    return "ok";
+  }
+
+  return "fail";
+};
+
+User.prototype.login = async function () {
+  try {
+    console.log(this.data.userEmail);
     this.cleanUp();
-    const existingUser = await userCollection.findOne({ email: this.data.email });
-    if (existingUser) {
-        console.log("User with this email already exists. Please use another email.");
-        return { message: "User with this email already exists. Please use another email." };
+    const attemptedUser = await userCollection.findOne({
+      userEmail: this.data.userEmail,
+    });
+
+    console.log("Found! the user: ");
+    console.log(attemptedUser);
+
+    if (
+      attemptedUser &&
+      bcrypt.compareSync(this.data.userPassword, attemptedUser.userPassword)
+    ) {
+      this.data = attemptedUser;
+      console.log("This data: ");
+      console.log(this.data);
+
+      return attemptedUser;
+    } else {
+      console.log("Invalid");
+      return "fail";
     }
-    this.data.password = await bcrypt.hash(this.data.password, 10);
-    await userCollection.insertOne(this.data);
-    return { message: "User added successfully." };
-}
+  } catch (error) {
+    console.log("Failed");
+    return "Please Try again later.";
+  }
+};
 
-User.prototype.getUser = async function(){
-    let data = await userCollection.find({}).toArray();
-    return data;
-}
-
-
-User.prototype.login = async function(){
-    try {
-        console.log(this.data.email);
-        this.cleanUp();
-        const attemptedUser = await userCollection.findOne({email: this.data.email});
-
-        console.log("Found! the user: ");
-        console.log(attemptedUser);
-
-        if(
-            attemptedUser && bcrypt.compareSync(this.data.password, attemptedUser.password)
-        )
-        {
-            this.data = attemptedUser
-            console.log("This data: ")
-            console.log(this.data)
-
-            return attemptedUser;
-        }
-        else{
-            console.log("Invalid")
-            throw "Invalid username/password"
-        }
-    } catch (error) {
-        console.log("Failed")
-        throw "Please Try again later."
-    }
-}
-
+User.prototype.getUser = async function () {
+  let data = await userCollection.find({}).toArray();
+  return data;
+};
 
 module.exports = User;
