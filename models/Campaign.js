@@ -47,4 +47,9 @@ Campaign.prototype.getAllUpcomingCampaigns = async function () {
   return "No Campaigns Found";
 };
 
+Campaign.prototype.getLatest5Campaign = async function () {
+  let data = await campaignCollection.find({ _id: -1 }).limit(5).toArray();
+  return data;
+};
+
 module.exports = Campaign;
