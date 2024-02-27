@@ -21,7 +21,7 @@ router.post("/campaign/create-campaign", (req, res) => {
   campaignController.addCampaign(req, res);
 });
 router.get(
-  "/campaign/getAllUpcomingCampaign",
+  "/campaign/getAllUpcomingCampaigns",
   campaignController.getAllUpcomingCampaigns
 );
 
@@ -29,6 +29,26 @@ router.get(
 router.get(
   "/campaign/getLatest5Campaign",
   campaignController.getLatest5Campaign
+);
+
+router.get(
+  "/campaign/getLatest5UpcomingCampaigns",
+  campaignController.getLatest5UpcomingCampaigns
+);
+
+router.post(
+  "/campaign/registerUserIntoCampaign",
+  campaignController.registerUserIntoCampaign
+);
+
+router.post(
+  "/campaign/checkIfAlreadyRegistered",
+  campaignController.checkIfAlreadyRegistered
+);
+
+router.post(
+  "/campaign/getRegisteredCampaignsOfUsers",
+  campaignController.getRegisteredCampaignsOfUsers
 );
 
 router.get("/", (req, res) => {

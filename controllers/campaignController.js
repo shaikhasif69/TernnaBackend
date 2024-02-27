@@ -52,3 +52,35 @@ exports.getLatest5Campaign = async function (req, res) {
   console.log(data);
   res.status(201).json({ data: data });
 };
+
+exports.getLatest5UpcomingCampaigns = async function (req, res) {
+  let campagin = new Campaign();
+  let data = await campagin.getLatest5UpcomingCampaigns();
+  res.status(201).json({ data: data });
+};
+
+exports.registerUserIntoCampaign = async function (req, res) {
+  const { userId, campaignId } = req.body;
+
+  let campagin = new Campaign();
+  let data = await campagin.registerUserIntoCampaign(userId, campaignId);
+  res.status(201).json({ data: data });
+};
+
+exports.checkIfAlreadyRegistered = async function (req, res) {
+  const { userId, campaignId } = req.body;
+  console.log("this is the body of atharva: " + req.body.campaignId);
+
+  let campaign = new Campaign();
+  let data = await campaign.checkIfAlreadyRegistered(userId, campaignId);
+  res.status(201).json({ data: data });
+};
+
+exports.getRegisteredCampaignsOfUsers = async function (req, res) {
+  const { userId } = req.body;
+  console.log(userId);
+
+  let campagin = new Campaign();
+  let data = await campagin.getRegisteredCampaignsOfUsers(userId);
+  res.status(201).json({ data: data });
+};
