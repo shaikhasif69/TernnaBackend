@@ -4,6 +4,12 @@ let Campaign = function (data) {
   this.data = data;
   this.errors = [];
 };
+const formatDate = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 
 Campaign.prototype.cleanUp = function () {
   this.data = {
@@ -33,15 +39,22 @@ Campaign.prototype.getAllCampaigns = async function () {
 
 Campaign.prototype.getAllUpcomingCampaigns = async function () {
   let currentDate = new Date();
+  let formattedCurrentDate = formatDate(currentDate);
 
   let data = await campaignCollection
     .find({
-      startDate: { $gte: currentDate },
+      startDate: { $gte: formattedCurrentDate },
     })
     .toArray();
 
-  if (data.length > 0) {
-    return data;
+  let filteredData = data.filter((campaign) => {
+    const startDate = new Date(campaign.startDate);
+    const dateDiff = startDate - currentDate;
+    return dateDiff > 0;
+  });
+
+  if (filteredData.length > 0) {
+    return filteredData;
   }
 
   return "No Campaigns Found";
