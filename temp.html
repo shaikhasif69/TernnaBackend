@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Maps Autocomplete</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBw7fIXJz5sA9IEcczMJ9FIzK91jvFIsno&libraries=places"></script>
+    <style>
+        #suggestionsContainer {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            z-index: 1000;
+        }
+
+        .suggestion {
+            padding: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <input id="locationInput" type="text" placeholder="Enter location">
+    <div id="suggestionsContainer"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            initAutocomplete();
+        });
+
+        function initAutocomplete() {
+            var input = document.getElementById('locationInput');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.addListener('place_changed', function () {
+                var place = autocomplete.getPlace();
+                console.log("Place:", place);
+                
+                if (place.geometry && place.geometry.location) {
+                    var latitude = place.geometry.location.lat();
+                    var longitude = place.geometry.location.lng();
+                    console.log("Latitude:", latitude);
+                    console.log("Longitude:", longitude);
+                }
+            });
+
+            var suggestionsContainer = document.getElementById('suggestionsContainer');
+
+            input.addEventListener('input', function () {
+                var inputValue = input.value;
+
+                var service = new google.maps.places.AutocompleteService();
+                service.getPlacePredictions(
+                    { input: inputValue },
+                    function (predictions, status) {
+                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+                            displaySuggestions(predictions);
+                        }
+                    }
+                );
+            });
+
+            function displaySuggestions(predictions) {
+                suggestionsContainer.innerHTML = '';
+                predictions.forEach(function (prediction) {
+                    var suggestion = document.createElement('div');
+                    suggestion.classList.add('suggestion');
+                    suggestion.textContent = prediction.description;
+                    suggestion.addEventListener('click', function () {
+                        input.value = prediction.description;
+                        suggestionsContainer.innerHTML = '';
+                    });
+                    suggestionsContainer.appendChild(suggestion);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
