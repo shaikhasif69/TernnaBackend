@@ -17,11 +17,11 @@ Ngo.prototype.cleanUp = function(){
         email: this.data.email, 
         phone: this.data.phone, 
         password: this.data.password, 
-        lat:this.lat,
-        long:this.long,
-        city:this.city,
-        state:this.state,
-        country:this.country,
+        lat:this.data.lat,
+        long:this.data.long,
+        city:this.data.city,
+        state:this.data.state,
+        country:this.data.country,
         CreatedDate: new Date(),
     }
 };
@@ -33,7 +33,8 @@ Ngo.prototype.createNgo = async function(){
         console.log("User with this email already exists. Please use another email.");
         return { message: "User with this email already exists. Please use another email." };
     }
-    this.data.password = await bcrypt.hash(this.data.password, 10);
+    console.log(this.data.name)
+    // this.data.password = await bcrypt.hash(this.data.password, 10);
     await ngoCollection.insertOne(this.data);
     return { message: "User added successfully." };
 }
