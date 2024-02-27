@@ -25,6 +25,12 @@ router.get(
   campaignController.getAllUpcomingCampaigns
 );
 
+// Atharva's Work
+router.get(
+  "/campaign/getLatest5Campaign",
+  campaignController.getLatest5Campaign
+);
+
 router.get("/", (req, res) => {
   res.send("Hello there! this is our project!");
 });
