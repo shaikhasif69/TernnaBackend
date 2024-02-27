@@ -6,6 +6,7 @@ const Campaign = require("../models/Campaign");
 
 exports.addCampaign = async function (req, res) {
   console.log("hittt");
+
   console.log(req.files);
 
   if (req.files) {
@@ -22,7 +23,7 @@ exports.addCampaign = async function (req, res) {
       req.body.attachment = fileName;
     }
   }
-
+console.log(req.body);
   let campaign = new Campaign(req.body);
   await campaign.createCampaign();
   res.status(201).json({ message: "campaign added" });

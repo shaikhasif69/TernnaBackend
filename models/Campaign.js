@@ -24,6 +24,7 @@ Campaign.prototype.cleanUp = function () {
     lat: this.data.lat,
     long: this.data.long,
     participants: [],
+    ngo: this.data.ngoEmail,
     CreatedDate: new Date(),
   };
 };

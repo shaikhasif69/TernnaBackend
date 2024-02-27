@@ -1,13 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
-
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 router.post("/loginUser", userController.login);
 router.post("/registerUser", userController.addUser);
 
 const ngoController = require("../controllers/ngoController");
 const campaignController = require("../controllers/campaignController");
-
+router.use(cookieParser());
 // NGO  routes
 router.post("/ngo/login", ngoController.login);
 router.post("/ngo/create-ngo", (req, res) => {
@@ -30,6 +31,8 @@ router.get(
   "/campaign/getLatest5Campaign",
   campaignController.getLatest5Campaign
 );
+router.get("/users/getAllUsers", userController.getAllUsers);
+module.exports = router;
 
 router.get(
   "/campaign/getLatest5UpcomingCampaigns",
@@ -54,4 +57,4 @@ router.post(
 router.get("/", (req, res) => {
   res.send("Hello there! this is our project!");
 });
-module.exports = router;
+
