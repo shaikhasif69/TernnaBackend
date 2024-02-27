@@ -14,6 +14,8 @@ User.prototype.cleanUp = function () {
     userEmail: this.data.userEmail,
     userPhone: this.data.userPhone,
     userPassword: this.data.userPassword,
+    latitude: this.data.latitude,
+    longitude: this.data.longitude,
     createdAt: new Date(),
   };
 };

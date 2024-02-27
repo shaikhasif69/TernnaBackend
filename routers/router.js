@@ -16,10 +16,14 @@ router.post("/ngo/create-ngo", (req, res) => {
 });
 
 // Camapign routes
-router.get("/campaign/get-campaign", campaignController.getCampaign);
+router.get("/campaign/getAllCampaigns", campaignController.getAllCampaigns);
 router.post("/campaign/create-campaign", (req, res) => {
   campaignController.addCampaign(req, res);
 });
+router.get(
+  "/campaign/getAllUpcomingCampaign",
+  campaignController.getAllUpcomingCampaigns
+);
 
 router.get("/", (req, res) => {
   res.send("Hello there! this is our project!");
