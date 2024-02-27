@@ -37,3 +37,9 @@ exports.getAllUpcomingCampaigns = async function (req, res) {
   let data = await campagin.getAllUpcomingCampaigns();
   res.status(201).json({ data: data });
 };
+
+exports.getCampaign = async function (req, res) {
+  let campaign = new Campaign();
+  let data = await campaign.getCampaign();
+  res.status(201).json({ data: data });
+};
