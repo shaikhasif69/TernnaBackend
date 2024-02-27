@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
 const ngoController = require('../controllers/ngoController')
+const campaignController = require("../controllers/campaignController")
 router.post("/user/login", userController.login);
 router.post("/user/create-user", userController.addUser);
 
@@ -11,6 +12,15 @@ router.post("/ngo/create-ngo", (req, res) => {
     console.log(req.body,"4erygbuhn"); // Log the request body
     ngoController.addNgo(req, res);
 });
+
+
+// Camapign routes
+router.get("/campaign/get-campaign", campaignController.getCampaign);
+router.post("/campaign/create-campaign", (req, res) => {
+    campaignController.addCampaign(req, res);
+});
+
+
 
 router.get("/", (req, res)=>{
     res.send('Hello there! this is our project!')
