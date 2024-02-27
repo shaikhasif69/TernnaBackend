@@ -48,7 +48,8 @@ Campaign.prototype.getAllUpcomingCampaigns = async function () {
 };
 
 Campaign.prototype.getLatest5Campaign = async function () {
-  let data = await campaignCollection.find({ _id: -1 }).limit(5).toArray();
+  let data = await campaignCollection.find({}).limit(5).toArray();
+  console.log(data);
   return data;
 };
 

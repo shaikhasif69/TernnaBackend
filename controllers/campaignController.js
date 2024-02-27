@@ -49,5 +49,6 @@ exports.getAllUpcomingCampaigns = async function (req, res) {
 exports.getLatest5Campaign = async function (req, res) {
   let campaign = new Campaign();
   let data = await campaign.getLatest5Campaign();
+  console.log(data);
   res.status(201).json({ data: data });
 };
