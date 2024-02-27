@@ -13,11 +13,11 @@ Campaign.prototype.cleanUp = function(){
         description: this.data.description, 
         attachment: this.data.attachment, 
         startDate: this.data.startDate, 
-        endDate:this.endDate,
-        address:this.address,
-        lat:this.lat,
-        long:this.long,
-        participants:this.participants,
+        endDate:this.data.endDate,
+        address:this.data.address,
+        lat:this.data.lat,
+        long:this.data.long,
+        participants:this.data.participants,
         CreatedDate: new Date(),
     }
 };
