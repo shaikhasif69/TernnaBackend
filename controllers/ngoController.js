@@ -25,21 +25,8 @@ exports.login = function(req, res){
 
 
 exports.addNgo = async function(req, res){
-    const { name, email, phone, password, lat, long, city, state, country } = req.body;
-    const newNgo = new Ngo({
-        name,
-        email,
-        phone,
-        password,
-        lat,
-        long,
-        city,
-        state,
-        country,
-     });
-    let ngo = new Ngo(newNgo)
-    console.log(ngo)
-    let data = await ngo.createNgo();
+    let ngo = new Ngo(req.body);
+    let data = await ngo.createNgo();   
     res.status(201).json({message: "ngo added"})
     
 }

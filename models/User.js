@@ -11,6 +11,8 @@ let User = function (data) {
 
 User.prototype.cleanUp = function () {
   this.data = {
+    userName:this.data.userName,
+    donations:Number(0),
     userEmail: this.data.userEmail,
     userPhone: this.data.userPhone,
     userPassword: this.data.userPassword,
