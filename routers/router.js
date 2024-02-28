@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
-const session = require("express-session");
-const cookieParser = require("cookie-parser");
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 router.post("/loginUser", userController.login);
 router.post("/registerUser", userController.addUser);
 
@@ -77,6 +77,10 @@ router.get("/patient/getAllPatient", patientController.getAllPatient);
 router.post("/patient/create-patient", (req, res) => {
   patientController.addPatient(req, res);
 });
+
+
+
+
 
 router.get("/", (req, res) => {
   res.send("Hello there! this is our project!");
