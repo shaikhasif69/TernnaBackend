@@ -23,7 +23,7 @@ exports.addCampaign = async function (req, res) {
       req.body.attachment = fileName;
     }
   }
-console.log(req.body);
+  console.log(req.body);
   let campaign = new Campaign(req.body);
   await campaign.createCampaign();
   res.status(201).json({ message: "campaign added" });
@@ -83,5 +83,13 @@ exports.getRegisteredCampaignsOfUsers = async function (req, res) {
 
   let campagin = new Campaign();
   let data = await campagin.getRegisteredCampaignsOfUsers(userId);
+  res.status(201).json({ data: data });
+};
+
+exports.getSearchResults = async function (req, res) {
+  const { search } = req.body;
+
+  let campagin = new Campaign();
+  let data = await campagin.getSearchResults(search);
   res.status(201).json({ data: data });
 };

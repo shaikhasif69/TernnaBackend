@@ -55,6 +55,8 @@ router.post(
   campaignController.getRegisteredCampaignsOfUsers
 );
 
+router.post("/getSearchResults", campaignController.getSearchResults);
+
 // Bloid Bank routes
 
 router.get("/bloobbank/getAllBloodBank", bloodbankController.getAllBloodBank);

@@ -161,4 +161,35 @@ Campaign.prototype.getRegisteredCampaignsOfUsers = async function (userId) {
   return registeredCampaigns;
 };
 
+Campaign.prototype.getSearchResults = async function (search) {
+  const pipelines = [];
+
+  if (search != null || search != undefined) {
+    pipelines.unshift({
+      $search: {
+        index: "searchCampaigns",
+        text: {
+          query: search,
+          // fuzzy: {
+          //   maxEdits: 1,
+          //   prefixLength: 2,
+          //   maxExpansions: 50,
+          // },
+          fuzzy: {},
+          path: {
+            wildcard: "title*",
+          },
+        },
+      },
+    });
+  }
+  let campaigns = await campaignCollection.aggregate(pipelines).toArray();
+
+  if (campaigns != null) {
+    return campaigns;
+  }
+
+  return null;
+};
+
 module.exports = Campaign;

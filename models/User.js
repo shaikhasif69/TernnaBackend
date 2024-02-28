@@ -11,21 +11,22 @@ let User = function (data) {
 
 User.prototype.cleanUp = function () {
   this.data = {
-    userName:this.data.userName,
-    donations:Number(0),
+    userName: this.data.userName,
+    donations: Number(0),
     userEmail: this.data.userEmail,
     userPhone: this.data.userPhone,
     userPassword: this.data.userPassword,
     latitude: this.data.latitude,
     longitude: this.data.longitude,
+    bloodGroup: this.data.bloodGroup,
     createdAt: new Date(),
   };
 };
 
-User.prototype.allUsers =async function(){
+User.prototype.allUsers = async function () {
   let data = await userCollection.find({}).toArray();
   return data;
-}
+};
 
 User.prototype.createUser = async function () {
   this.cleanUp();
