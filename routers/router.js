@@ -9,6 +9,7 @@ router.post("/registerUser", userController.addUser);
 const ngoController = require("../controllers/ngoController");
 const campaignController = require("../controllers/campaignController");
 const bloodbankController = require("../controllers/bloodbankController");
+const patientController = require("../controllers/patientController")
 router.use(cookieParser());
 // NGO  routes
 router.post("/ngo/login", ngoController.login);
@@ -57,12 +58,22 @@ router.post(
 
 // Bloid Bank routes
 
-router.get("/bloobbank/getAllBloodBank", bloodbankController.getAllBloodBank);
-router.post("/campaign/create-blood-bank", (req, res) => {
+router.get("/bloodbank/getAllBloodBank", bloodbankController.getAllBloodBank);
+router.post("/bloodbank/create-blood-bank", (req, res) => {
   bloodbankController.addBloodBank(req, res);
 });
 router.post("/bloodbank/update-blood-groups", (req, res) => {
   bloodbankController.updateBloodGroups(req, res);
+});
+
+
+
+
+// Patient routes
+
+router.get("/patient/getAllPatient", patientController.getAllPatient);
+router.post("/patient/create-patient", (req, res) => {
+  patientController.addPatient(req, res);
 });
 
 router.get("/", (req, res) => {
