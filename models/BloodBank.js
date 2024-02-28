@@ -40,6 +40,7 @@ BloodBank.prototype.createBloodBank = async function () {
 
 BloodBank.prototype.getAllBloodBank = async function () {
   let data = await bloodbankCollection.find({}).toArray();
+  console.log(data)
   return data;
 };
 
