@@ -75,6 +75,20 @@ User.prototype.login = async function () {
   }
 };
 
+User.prototype.makeRSVP = async function(){
+  let _id = this.data._id
+  await userCollection.findById(id, function (err, docs) {
+    if (err){
+        return err
+    }
+    else{
+        Username =  docs.userName
+        console.log(Username)
+    }
+  
+});
+}
+
 User.prototype.getAllUsers = async function () {
   let data = await userCollection.find({}).toArray();
   return data;

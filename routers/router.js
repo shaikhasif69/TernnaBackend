@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
+const rsvpController = require("../controllers/rsvpController");
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 router.post("/loginUser", userController.login);
@@ -58,6 +59,13 @@ router.get("/patient/getAllPatient", patientController.getAllPatient);
 router.post("/patient/create-patient", (req, res) => {
   patientController.addPatient(req, res);
 });
+
+
+
+//  Certificate generation
+router.post("/rsvp", (req,res)=>{
+  rsvpController.RSVPEvent(req,res);
+}); //
 
 router.get("/", (req, res) => {
   res.send("Hello there! this is our project!");
