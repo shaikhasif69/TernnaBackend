@@ -1,3 +1,5 @@
+const { ObjectId } = require("mongodb");
+
 const campaignCollection = require("../db").collection("camapign");
 
 let Campaign = function (data) {
@@ -6,8 +8,8 @@ let Campaign = function (data) {
 };
 const formatDate = (date) => {
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
 
@@ -21,8 +23,8 @@ Campaign.prototype.cleanUp = function () {
     address: this.data.address,
     lat: this.data.lat,
     long: this.data.long,
-    participants: this.data.participants,
-    ngo:this.data.ngoEmail,
+    participants: [],
+    ngo: this.data.ngoEmail,
     CreatedDate: new Date(),
   };
 };
@@ -62,8 +64,101 @@ Campaign.prototype.getAllUpcomingCampaigns = async function () {
 };
 
 Campaign.prototype.getLatest5Campaign = async function () {
-  let data = await campaignCollection.find({ _id: -1 }).limit(5).toArray();
+  let data = await campaignCollection.find({}).limit(5).toArray();
+  console.log(data);
   return data;
+};
+
+Campaign.prototype.getLatest5UpcomingCampaigns = async function () {
+  let currentDate = new Date();
+  let formattedCurrentDate = formatDate(currentDate);
+
+  let data = await campaignCollection
+    .find({
+      startDate: { $gte: formattedCurrentDate },
+    })
+    .limit(5)
+    .toArray();
+
+  let filteredData = data.filter((campaign) => {
+    const startDate = new Date(campaign.startDate);
+    const dateDiff = startDate - currentDate;
+    return dateDiff > 0;
+  });
+
+  if (filteredData.length > 0) {
+    return filteredData;
+  }
+
+  return "No Campaigns Found";
+};
+
+Campaign.prototype.registerUserIntoCampaign = async function (
+  userId,
+  campaignId
+) {
+  console.log(userId, campaignId);
+  // First, Find the campaign
+  let campaign = await campaignCollection.findOneAndUpdate(
+    {
+      _id: new ObjectId(campaignId),
+    },
+    {
+      $push: {
+        participants: {
+          userId: new ObjectId(userId),
+          isDonated: false,
+          certificatedRecieved: false,
+        },
+      },
+    }
+  );
+
+  return "ok";
+};
+
+Campaign.prototype.checkIfAlreadyRegistered = async function (
+  userId,
+  camapignId
+) {
+  console.log("this backedn campagin: " + camapignId);
+  console.log("user id: " + userId);
+
+  let isPresent = await campaignCollection
+    .find({
+      _id: new ObjectId(camapignId),
+      "participants.userId": new ObjectId(userId),
+    })
+    .toArray();
+  console.log("this is the isPresent array : " + isPresent);
+  console.log(isPresent.length);
+  if (isPresent.length > 0) {
+    return true;
+  }
+
+  return false;
+};
+
+Campaign.prototype.getRegisteredCampaignsOfUsers = async function (userId) {
+  let registeredCampaigns = await campaignCollection
+    .aggregate([
+      {
+        $match: {
+          participants: {
+            $elemMatch: {
+              userId: new ObjectId(userId),
+            },
+          },
+        },
+      },
+    ])
+    .toArray();
+
+  if (registeredCampaigns.length <= 0) {
+    return null;
+  }
+
+  return registeredCampaigns;
 };
 
 module.exports = Campaign;

@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
 router.post("/loginUser", userController.login);
 router.post("/registerUser", userController.addUser);
 
@@ -24,7 +24,7 @@ router.post("/campaign/create-campaign", (req, res) => {
   campaignController.addCampaign(req, res);
 });
 router.get(
-  "/campaign/getAllUpcomingCampaign",
+  "/campaign/getAllUpcomingCampaigns",
   campaignController.getAllUpcomingCampaigns
 );
 
@@ -36,10 +36,27 @@ router.get(
 router.get("/users/getAllUsers", userController.getAllUsers);
 module.exports = router;
 
+router.get(
+  "/campaign/getLatest5UpcomingCampaigns",
+  campaignController.getLatest5UpcomingCampaigns
+);
 
+router.post(
+  "/campaign/registerUserIntoCampaign",
+  campaignController.registerUserIntoCampaign
+);
+
+router.post(
+  "/campaign/checkIfAlreadyRegistered",
+  campaignController.checkIfAlreadyRegistered
+);
+
+router.post(
+  "/campaign/getRegisteredCampaignsOfUsers",
+  campaignController.getRegisteredCampaignsOfUsers
+);
 
 // Bloid Bank routes
-
 
 router.get("/bloodbank/getAllBloodBank", bloodbankController.getAllBloodBank);
 router.post("/bloodbank/create-blood-bank", (req, res) => {
@@ -62,4 +79,3 @@ router.post("/patient/create-patient", (req, res) => {
 router.get("/", (req, res) => {
   res.send("Hello there! this is our project!");
 });
-
